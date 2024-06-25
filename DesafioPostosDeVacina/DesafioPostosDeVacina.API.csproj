@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.31">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DesafioPostosDeVacina.Application\DesafioPostosDeVacina.Application.csproj" />
+    <ProjectReference Include="..\DesafioPostosDeVacina.Domain\DesafioPostosDeVacina.Domain.csproj" />
+    <ProjectReference Include="..\DesafioPostosDeVacina.Infra\DesafioPostosDeVacina.Infra.csproj" />
   </ItemGroup>
 
 </Project>
