@@ -10,7 +10,7 @@ namespace DesafioPostosDeVacina.Domain.Entities
         public int Quantidade { get; protected set; }
         public DateTime DataValidade { get; protected set; }
         public int PostoId { get; set; }
-        public Posto Posto { get; set; }
+        public virtual Posto Posto { get; set; }
 
         public Vacina(string nome, string fabricante, string lote, int quantidade, DateTime dataValidade)
         {

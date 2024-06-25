@@ -2,9 +2,8 @@
 
 namespace DesafioPostosDeVacina.Application.DTOs
 {
-    public class PostoDTO
+    public class CreatePostoDTO
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
     }
 }

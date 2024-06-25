@@ -22,7 +22,7 @@ namespace DesafioPostosDeVacina.Application.Services
             var postosExistentes = await _repository.GetAllAsync();
             if (postosExistentes.Any(p => p.Nome == dto.Nome))
             {
-                 throw new Exception("Já existe um posto com este nome.");
+                throw new Exception("Já existe um posto com este nome.");
             }
             await _repository.CreateAsync(_mapper.Map<Posto>(dto));
         }
@@ -39,12 +39,12 @@ namespace DesafioPostosDeVacina.Application.Services
 
         public async Task Remove(int? id)
         {
-            var dto = await _repository.GetByIdAsync(id);
-            if (dto.Vacinas.Any())
+            var posto = await _repository.GetByIdAsync(id);
+            if (posto.Vacinas.Any())
             {
                 throw new Exception("Não é possível excluir um posto que possui vacinas associadas.");
             }
-            await _repository.RemoveAsync(_repository.GetByIdAsync(id).Result);
+            await _repository.RemoveAsync(posto);
         }
 
         public async Task Update(PostoDTO dto)

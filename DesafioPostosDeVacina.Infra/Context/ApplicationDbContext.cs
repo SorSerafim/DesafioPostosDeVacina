@@ -1,4 +1,5 @@
 ﻿using DesafioPostosDeVacina.Domain.Entities;
+using DesafioPostosDeVacina.Infra.ModelTypeConfiguration;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioPostosDeVacina.Infra.Context
@@ -12,13 +13,10 @@ namespace DesafioPostosDeVacina.Infra.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Posto>()
-                .HasIndex(p => p.Nome)
-                .IsUnique();
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Vacina>()
-                .HasIndex(v => v.Lote)
-                .IsUnique();
+            modelBuilder.ApplyConfiguration(new PostoConfiguration());
+            modelBuilder.ApplyConfiguration(new VacinaConfiguration());
         }
     }
 }

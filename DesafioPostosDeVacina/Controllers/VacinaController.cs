@@ -6,50 +6,49 @@ namespace DesafioPostosDeVacina.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostosController : ControllerBase
+    public class VacinaController : ControllerBase
     {
-        private readonly IService<PostoDTO> _service;
-        public PostosController(IService<PostoDTO> service)
+        private readonly IService<VacinaDTO> _service;
+        public VacinaController(IService<VacinaDTO> service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostoDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<VacinaDTO>>> GetAll()
         {
             return Ok(await _service.GetAll());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostoDTO>> GetById(int id)
+        public async Task<ActionResult<VacinaDTO>> GetById(int id)
         {
-            var posto = await _service.GetById(id);
-            if (posto == null)
+            var vacina = await _service.GetById(id);
+            if (vacina == null)
             {
                 return NotFound();
             }
-            return Ok(posto);
+            return Ok(vacina);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(PostoDTO createPostoDto)
+        public async Task<ActionResult> Add(VacinaDTO createVacinaDto)
         {
-            await _service.Add(createPostoDto);
-            return CreatedAtAction(nameof(GetById), new { id = createPostoDto.Nome }, createPostoDto);
+            await _service.Add(createVacinaDto);
+            return CreatedAtAction(nameof(GetById), new { id = createVacinaDto.PostoId }, createVacinaDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, PostoDTO postoDto)
+        public async Task<ActionResult> Update(int id, VacinaDTO vacinaDto)
         {
-            if (id != postoDto.Id)
+            if (id != vacinaDto.Id)
             {
                 return BadRequest();
             }
 
-            await _service.Update(postoDto);
+            await _service.Update(vacinaDto);
             return NoContent();
         }
-
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int id)

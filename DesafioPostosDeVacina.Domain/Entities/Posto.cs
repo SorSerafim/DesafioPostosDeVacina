@@ -5,7 +5,7 @@ namespace DesafioPostosDeVacina.Domain.Entities
     public class Posto : Entity
     {
         public string Nome { get; protected set; }
-        public ICollection<Vacina> Vacinas { get; set; }
+        public virtual ICollection<Vacina> Vacinas { get; set; }
 
         public Posto( string nome)
         {

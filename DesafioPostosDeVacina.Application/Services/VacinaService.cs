@@ -29,8 +29,8 @@ namespace DesafioPostosDeVacina.Application.Services
 
         public async Task Add(VacinaDTO dto)
         {
-            if (dto.DataValidade <= DateTime.Now)
-            {
+            if(dto.DataValidade <= DateTime.Today)
+        {
                 throw new Exception("A data de validade deve ser uma data futura.");
             }
 
@@ -50,7 +50,12 @@ namespace DesafioPostosDeVacina.Application.Services
 
         public async Task Remove(int? id)
         {
-            await _repository.RemoveAsync(_repository.GetByIdAsync(id).Result);
+            var vacina = await _repository.GetByIdAsync(id);
+            if (vacina == null)
+            {
+                throw new Exception("Vacina não encontrada.");
+            }
+            await _repository.RemoveAsync(vacina);
         }
     }
 }

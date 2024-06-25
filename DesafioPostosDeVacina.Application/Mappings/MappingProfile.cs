@@ -9,7 +9,9 @@ namespace DesafioPostosDeVacina.Application.Mappings
         public MappingProfile()
         {
             CreateMap<Posto, PostoDTO>().ReverseMap();
+            CreateMap<CreatePostoDTO, Posto>();
             CreateMap<Vacina, VacinaDTO>().ReverseMap();
+            CreateMap<CreateVacinaDTO, Vacina>();
         }
     }
 }
