@@ -13,35 +13,32 @@ namespace DesafioPostosDeVacina.Infra.Repositories
         {
             _context = context;        
         }
-        public async Task<Vacina> CreateAsync(Vacina entity)
+        public void Create(Vacina entity)
         {
             _context.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            _context.SaveChanges();
         }
 
-        public async Task<IEnumerable<Vacina>> GetAllAsync()
-        {
-            return await _context.Vacinas.ToListAsync();
-        }
-
-        public async Task<Vacina> GetByIdAsync(int? id)
-        {
-            return await _context.Vacinas.FindAsync(id);
-        }
-
-        public async Task<Vacina> RemoveAsync(Vacina entity)
-        {
-            _context.Remove(entity);
-            await _context.SaveChangesAsync();
-            return entity;
-        }
-
-        public async Task<Vacina> UpdateAsync(Vacina entity)
+        public void Update(Vacina entity)
         {
             _context.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            _context.SaveChanges();
+        }
+
+        public void Remove(Vacina entity)
+        {
+            _context.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public Vacina GetById(int id)
+        {
+            return _context.Vacinas.FirstOrDefault(p => p.Id == id);
+        }
+
+        public List<Vacina> GetAll()
+        {
+            return _context.Vacinas.ToList();
         }
     }
 }
