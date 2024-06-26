@@ -30,11 +30,10 @@ namespace DesafioPostosDeVacina.Infra.Repositories
             return await _context.Vacinas.FindAsync(id);
         }
 
-        public async Task<Vacina> RemoveAsync(Vacina entity)
+        public async Task RemoveAsync(Vacina entity)
         {
-            _context.Remove(entity);
+            _context.Vacinas.Remove(entity);
             await _context.SaveChangesAsync();
-            return entity;
         }
 
         public async Task<Vacina> UpdateAsync(Vacina entity)

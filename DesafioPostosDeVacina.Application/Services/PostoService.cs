@@ -40,11 +40,11 @@ namespace DesafioPostosDeVacina.Application.Services
         public async Task Remove(int? id)
         {
             var posto = await _repository.GetByIdAsync(id);
-            if (posto.Vacinas.Any())
+            if (posto == null)
             {
-                throw new Exception("Não é possível excluir um posto que possui vacinas associadas.");
+                throw new Exception("Posto não encontrado.");
             }
-            await _repository.RemoveAsync(posto);
+            _repository.RemoveAsync(posto);
         }
 
         public async Task Update(PostoDTO dto)

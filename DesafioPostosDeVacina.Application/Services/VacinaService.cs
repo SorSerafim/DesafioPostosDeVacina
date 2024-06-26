@@ -55,7 +55,7 @@ namespace DesafioPostosDeVacina.Application.Services
             {
                 throw new Exception("Vacina não encontrada.");
             }
-            await _repository.RemoveAsync(vacina);
+            _repository.RemoveAsync(vacina);
         }
     }
 }

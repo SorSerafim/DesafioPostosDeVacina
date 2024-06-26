@@ -27,11 +27,10 @@ namespace DesafioPostosDeVacina.Infra.Repositories
             return entity;
         }
 
-        public async Task<Posto> RemoveAsync(Posto entity)
+        public async Task RemoveAsync(Posto entity)
         {
-            _context.Remove(entity);
+            _context.Postos.Remove(entity);
             await _context.SaveChangesAsync();
-            return entity;
         }
 
         public async Task<Posto> GetByIdAsync(int? id)

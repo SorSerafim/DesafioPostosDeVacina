@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DesafioPostosDeVacina.Infra.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace DesafioPostosDeVacina.Infra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,11 +28,11 @@ namespace DesafioPostosDeVacina.Infra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fabricante = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lote = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Fabricante = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Lote = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Quantidade = table.Column<int>(type: "int", nullable: false),
-                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "date", nullable: false),
                     PostoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -45,12 +45,6 @@ namespace DesafioPostosDeVacina.Infra.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Postos_Nome",
-                table: "Postos",
-                column: "Nome",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vacinas_Lote",

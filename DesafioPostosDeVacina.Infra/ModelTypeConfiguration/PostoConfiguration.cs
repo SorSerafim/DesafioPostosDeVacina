@@ -22,8 +22,8 @@ namespace DesafioPostosDeVacina.Infra.ModelTypeConfiguration
             // Relacionamentos
             builder.HasMany(p => p.Vacinas)
                 .WithOne(v => v.Posto)
-                .HasForeignKey(v => v.PostoId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(v => v.PostoId);
+                //.OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

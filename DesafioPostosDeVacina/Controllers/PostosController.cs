@@ -52,10 +52,15 @@ namespace DesafioPostosDeVacina.API.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Remove(int id)
+        public async Task<ActionResult<PostoDTO>> Remove(int id)
         {
+            var dto = await _service.GetById(id);
+            if (dto == null)
+                return NotFound("Posto não encontrado!");
+
             await _service.Remove(id);
-            return NoContent();
+
+            return Ok(dto);
         }
     }
 }
