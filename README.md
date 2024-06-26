@@ -46,7 +46,8 @@ Este projeto é um sistema backend para o gerenciamento de postos de vacinação
 ### Repositórios
 
 - `IRepository<TEntity>`
-- `Repository<TEntity>`
+- `PostoRepository`
+- `VacinaRepository`
 
 ### Controllers
 
@@ -63,6 +64,12 @@ Este projeto é um sistema backend para o gerenciamento de postos de vacinação
 
 - AutoMapper
 - Entity Framework Core
+
+##Criando o Banco de Dados no Docker
+
+Você pode criar o banco de dados no Docker utilizando o seguinte comando:
+
+- docker run -v ~/docker --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=1q2w3e4r@#$" -p 1433:1433 -d mcr.microsoft.com/mssql/server
 
 ### Configuração do Banco de Dados
 
