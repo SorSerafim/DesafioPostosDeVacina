@@ -3,53 +3,69 @@ using DesafioPostosDeVacina.Application.DTOs;
 using DesafioPostosDeVacina.Application.Interfaces;
 using DesafioPostosDeVacina.Domain.Entities;
 using DesafioPostosDeVacina.Domain.Interfaces;
+using FluentResults;
+using System.IO;
 
 namespace DesafioPostosDeVacina.Application.Services
 {
-    public class PostoService : IService<PostoDTO>
+    public class PostoService : IPostoService
     {
-        private IRepository<Posto> _repository;
-        private readonly IMapper _mapper;
+        private IPostoRepository _repository;
+        private IMapper _mapper;
 
-        public PostoService(IRepository<Posto> repository, IMapper mapper)
+        public PostoService(IPostoRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task Add(PostoDTO dto)
+        public void CreatePosto(CreatePostoDTO createDto)
         {
-            var postosExistentes = await _repository.GetAllAsync();
-            if (postosExistentes.Any(p => p.Nome == dto.Nome))
+            var postosExistentes = _repository.GetAll();
+            if(postosExistentes.Any(p => p.Nome == createDto.Nome))
             {
-                throw new Exception("Já existe um posto com este nome.");
+                throw new Exception("Já exite um posto com esse nome!");
             }
-            await _repository.CreateAsync(_mapper.Map<Posto>(dto));
+            _repository.Create(_mapper.Map<Posto>(createDto));
         }
 
-        public async Task<PostoDTO> GetById(int? id)
+        public Result UpdatePosto(int id, CreatePostoDTO updateDto)
         {
-            return _mapper.Map<PostoDTO>(await _repository.GetByIdAsync(id));
-        }
-
-        public async Task<IEnumerable<PostoDTO>> GetAll()
-        {
-            return _mapper.Map<List<PostoDTO>>(await _repository.GetAllAsync());
-        }
-
-        public async Task Remove(int? id)
-        {
-            var posto = await _repository.GetByIdAsync(id);
-            if (posto.Vacinas.Any())
+            Posto posto = _repository.GetById(id);
+            if (posto != null)
             {
-                throw new Exception("Não é possível excluir um posto que possui vacinas associadas.");
+                posto.Nome = updateDto.Nome;
+                _repository.Update(posto);
+                return Result.Ok();
             }
-            await _repository.RemoveAsync(posto);
+            return Result.Fail("Posto não encontrado.");
         }
 
-        public async Task Update(PostoDTO dto)
+        public Result DeletePosto(int id)
         {
-            await _repository.UpdateAsync(_mapper.Map<Posto>(dto));
+            Posto posto = _repository.GetById(id);
+            if (posto == null)
+            {
+                return Result.Fail("Posto não encontrado.");
+            }
+            if(posto.Vacinas != null)
+            {
+                return Result.Fail("Não é possível deletar um posto com vacinas cadastradas.");
+            }
+            _repository.Remove(posto);
+            return Result.Ok();
+        }
+
+        public ReadPostoDTO GetPosto(int id)
+        {
+            Posto posto = _repository.GetById(id);
+            if(posto != null) return _mapper.Map<ReadPostoDTO>(posto);
+            return null;
+        }
+
+        public List<ReadPostoDTO> GetAllPostos()
+        {
+            return _mapper.Map<List<ReadPostoDTO>>(_repository.GetAll());
         }
     }
 }

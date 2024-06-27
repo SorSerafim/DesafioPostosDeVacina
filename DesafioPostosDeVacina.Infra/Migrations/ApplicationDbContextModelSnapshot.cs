@@ -32,14 +32,12 @@ namespace DesafioPostosDeVacina.Infra.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Nome")
-                        .IsUnique();
-
-                    b.ToTable("Postos");
+                    b.ToTable("Postos", (string)null);
                 });
 
             modelBuilder.Entity("DesafioPostosDeVacina.Domain.Entities.Vacina", b =>
@@ -51,19 +49,22 @@ namespace DesafioPostosDeVacina.Infra.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("DataValidade")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Fabricante")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Lote")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("PostoId")
                         .HasColumnType("int");
@@ -78,7 +79,7 @@ namespace DesafioPostosDeVacina.Infra.Migrations
 
                     b.HasIndex("PostoId");
 
-                    b.ToTable("Vacinas");
+                    b.ToTable("Vacinas", (string)null);
                 });
 
             modelBuilder.Entity("DesafioPostosDeVacina.Domain.Entities.Vacina", b =>
@@ -86,7 +87,7 @@ namespace DesafioPostosDeVacina.Infra.Migrations
                     b.HasOne("DesafioPostosDeVacina.Domain.Entities.Posto", "Posto")
                         .WithMany("Vacinas")
                         .HasForeignKey("PostoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Posto");

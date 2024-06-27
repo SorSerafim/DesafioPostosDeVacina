@@ -1,44 +1,42 @@
 ﻿using DesafioPostosDeVacina.Domain.Entities;
 using DesafioPostosDeVacina.Domain.Interfaces;
 using DesafioPostosDeVacina.Infra.Context;
+using Locadora.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioPostosDeVacina.Infra.Repositories
 {
-    public class VacinaRepository : IRepository<Vacina>
+    public class VacinaRepository : RepositoryBase<Vacina>, IVacinaRepository
     {
         private ApplicationDbContext _context;
 
-        public VacinaRepository(ApplicationDbContext context) 
-        {
-            _context = context;        
-        }
-        public void Create(Vacina entity)
-        {
-            _context.Add(entity);
-            _context.SaveChanges();
+        public VacinaRepository(ApplicationDbContext context) : base(context)
+        {     
         }
 
-        public void Update(Vacina entity)
+        /*
+        public override Vacina GetById(int id)
         {
-            _context.Update(entity);
-            _context.SaveChanges();
+            return _context.Vacinas
+                .Include(v => v.Posto)
+                .FirstOrDefault(x => x.Id == id);
         }
 
-        public void Remove(Vacina entity)
+        public override List<Vacina> GetAll()
         {
-            _context.Remove(entity);
-            _context.SaveChanges();
+            return _context.Vacinas
+                .Include(v => v.Posto)
+                .OrderBy(x => x.Nome)
+                .ToList();
         }
 
-        public Vacina GetById(int id)
+        public List<Vacina> GetAllWithNameOfPosto(string nome)
         {
-            return _context.Vacinas.FirstOrDefault(p => p.Id == id);
+            return _context.Vacinas
+                .Include(v => v.Posto)
+                .Where(x => x.Posto.Nome.Equals(nome))
+                .ToList();
         }
-
-        public List<Vacina> GetAll()
-        {
-            return _context.Vacinas.ToList();
-        }
+        */
     }
 }

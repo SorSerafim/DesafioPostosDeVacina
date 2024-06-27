@@ -1,44 +1,23 @@
 ﻿using DesafioPostosDeVacina.Domain.Entities;
 using DesafioPostosDeVacina.Domain.Interfaces;
 using DesafioPostosDeVacina.Infra.Context;
+using Locadora.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioPostosDeVacina.Infra.Repositories
 {
-    public class PostoRepository : IRepository<Posto>
+    public class PostoRepository : RepositoryBase<Posto>, IPostoRepository
     {
-        private ApplicationDbContext _context;
-
-        public PostoRepository(ApplicationDbContext context) 
+        public PostoRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
-        }
-        public void Create(Posto entity)
-        {
-            _context.Add(entity);
-            _context.SaveChanges();
         }
 
-        public void Update(Posto entity)
+        public override List<Posto> GetAll()
         {
-            _context.Update(entity);
-            _context.SaveChanges();
-        }
-
-        public void Remove(Posto entity)
-        {
-            _context.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Posto GetById(int id)
-        {
-            return _context.Postos.FirstOrDefault(p => p.Id == id);
-        }
-
-        public List<Posto> GetAll()
-        {
-            return _context.Postos.ToList();
+            return _context.Postos
+                .Include(p => p.Vacinas)
+                .OrderBy(p => p.Nome)
+                .ToList();
         }
     }
 }

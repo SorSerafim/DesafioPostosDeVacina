@@ -3,59 +3,78 @@ using DesafioPostosDeVacina.Application.DTOs;
 using DesafioPostosDeVacina.Application.Interfaces;
 using DesafioPostosDeVacina.Domain.Entities;
 using DesafioPostosDeVacina.Domain.Interfaces;
+using FluentResults;
 
 namespace DesafioPostosDeVacina.Application.Services
 {
-    public class VacinaService : IService<VacinaDTO>
+    public class VacinaService : IVacinaService
     {
-        private IRepository<Vacina> _repository;
+        private IVacinaRepository _repository;
         private readonly IMapper _mapper;
 
-        public VacinaService(IRepository<Vacina> repository, IMapper mapper)
+        public VacinaService(IVacinaRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<VacinaDTO>> GetAll()
+        public void CreateVacina(CreateVacinaDTO createDto)
         {
-            return _mapper.Map<List<VacinaDTO>>(await _repository.GetAllAsync());
+            _repository.Create(_mapper.Map<Vacina>(createDto));
         }
 
-        public async Task<VacinaDTO> GetById(int? id)
+        public Result UpdateVacina(int id, CreateVacinaDTO updateDto)
         {
-            return _mapper.Map<VacinaDTO>(await _repository.GetByIdAsync(id));
-        }
-
-        public async Task Add(VacinaDTO dto)
-        {
-            if(dto.DataValidade <= DateTime.Today)
-        {
-                throw new Exception("A data de validade deve ser uma data futura.");
-            }
-
-            var lotesExistentes = await _repository.GetAllAsync();
-            if (lotesExistentes.Any(v => v.Lote == dto.Lote))
+            
+            if(updateDto.DataValidade <= DateTime.Today)
             {
-                throw new Exception("Já existe uma vacina com este lote.");
+                return Result.Fail("A data de validade tem que ser uma data futura!");
             }
 
-            await _repository.CreateAsync(_mapper.Map<Vacina>(dto));
-        }
-
-        public async Task Update(VacinaDTO dto)
-        {
-            await _repository.UpdateAsync(_mapper.Map<Vacina>(dto));
-        }
-
-        public async Task Remove(int? id)
-        {
-            var vacina = await _repository.GetByIdAsync(id);
-            if (vacina == null)
+            Vacina vacina = _repository.GetById(id);
+            if (vacina != null)
             {
-                throw new Exception("Vacina não encontrada.");
+                vacina.Id = id;
+                vacina.Nome = updateDto.Nome;
+                vacina.Lote = updateDto.Lote;
+                vacina.Fabricante = updateDto.Fabricante;
+                vacina.Quantidade = updateDto.Quantidade;
+                vacina.DataValidade = updateDto.DataValidade;
+                vacina.PostoId = updateDto.PostoId;
+                _repository.Update(vacina);
+                return Result.Ok();
             }
-            await _repository.RemoveAsync(vacina);
+            return Result.Fail("Vacina não encontrada");
         }
+
+        public Result DeleteVacina(int id)
+        {
+            Vacina vacina = _repository.GetById(id);
+            if (vacina != null) 
+            {
+                _repository.Remove(vacina);
+                return Result.Ok();
+            }
+            return Result.Fail("Vacina não encontrada");
+        }
+
+        public ReadVacinaDTO GetVacina(int id)
+        {
+            Vacina vacina = _repository.GetById(id);
+            if (vacina != null) return _mapper.Map<ReadVacinaDTO>(vacina);
+            return null;
+        }
+
+        public List<ReadVacinaDTO> GetAllVacinas()
+        {
+            return _mapper.Map<List<ReadVacinaDTO>>(_repository.GetAll());
+        }
+
+        /*
+        public List<ReadVacinaDTO> GetAllVacinasOfOnePosto(string nome)
+        {
+            return _mapper.Map<List<ReadVacinaDTO>>(_repository.GetAllWithNameOfPosto(nome));
+        }
+        */
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DesafioPostosDeVacina.Application.DTOs;
 using DesafioPostosDeVacina.Application.Interfaces;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioPostosDeVacina.API.Controllers
@@ -8,53 +9,49 @@ namespace DesafioPostosDeVacina.API.Controllers
     [ApiController]
     public class PostosController : ControllerBase
     {
-        private readonly IService<PostoDTO> _service;
-        public PostosController(IService<PostoDTO> service)
+        private IPostoService _service;
+
+        public PostosController(IPostoService service)
         {
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostoDTO>>> GetAll()
+        [HttpPost("Cria um posto")]
+        public IActionResult Create(CreatePostoDTO createDto)
         {
-            return Ok(await _service.GetAll());
+            _service.CreatePosto(createDto);
+            return Ok();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostoDTO>> GetById(int id)
+        [HttpGet("Lista de postos")]
+        public IActionResult GetAll()
         {
-            var posto = await _service.GetById(id);
-            if (posto == null)
-            {
-                return NotFound();
-            }
-            return Ok(posto);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Add(PostoDTO createPostoDto)
-        {
-            await _service.Add(createPostoDto);
-            return CreatedAtAction(nameof(GetById), new { id = createPostoDto.Nome }, createPostoDto);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, PostoDTO postoDto)
-        {
-            if (id != postoDto.Id)
-            {
-                return BadRequest();
-            }
-
-            await _service.Update(postoDto);
+            List<ReadPostoDTO> listDto = _service.GetAllPostos();
+            if (listDto != null) return Ok(listDto);
             return NoContent();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetPostoById(int id)
+        {
+            ReadPostoDTO readDto = _service.GetPosto(id);
+            if (readDto != null) return Ok(readDto);
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePostoById(int id, CreatePostoDTO updateDto)
+        {
+            Result result = _service.UpdatePosto(id, updateDto);
+            if (result.IsFailed) return NotFound();
+            return NoContent();
+        }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Remove(int id)
+        public IActionResult DeletePostoById(int id)
         {
-            await _service.Remove(id);
+            Result result = _service.DeletePosto(id);
+            if (result.IsFailed) return NotFound();
             return NoContent();
         }
     }

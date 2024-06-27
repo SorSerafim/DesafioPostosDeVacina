@@ -21,12 +21,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IRepository<Vacina>, VacinaRepository>();
-builder.Services.AddScoped<IRepository<Posto>,PostoRepository>();
+builder.Services.AddTransient<IVacinaRepository, VacinaRepository>();
+builder.Services.AddTransient<IPostoRepository,PostoRepository>();
 
 
-builder.Services.AddScoped<IService<VacinaDTO>, VacinaService>();
-builder.Services.AddScoped<IService<PostoDTO>, PostoService>();
+builder.Services.AddTransient<IVacinaService, VacinaService>();
+builder.Services.AddTransient<IPostoService, PostoService>();
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

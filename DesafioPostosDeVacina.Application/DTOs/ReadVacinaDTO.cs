@@ -2,7 +2,7 @@
 
 namespace DesafioPostosDeVacina.Application.DTOs
 {
-    public class VacinaDTO
+    public class ReadVacinaDTO
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -10,6 +10,6 @@ namespace DesafioPostosDeVacina.Application.DTOs
         public string Lote { get; set; }
         public int Quantidade { get; set; }
         public DateTime DataValidade { get; set; }
-        public int PostoId { get; set; }
+        public string Posto { get; set; }
     }
 }
