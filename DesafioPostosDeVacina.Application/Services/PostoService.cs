@@ -34,12 +34,6 @@ namespace DesafioPostosDeVacina.Application.Services
             Posto posto = _repository.GetById(id);
             if (posto != null)
             {
-                var postosExistentes = _repository.GetAll();
-                if (postosExistentes.Any(p => p.Nome == updateDto.Nome))
-                {
-                    throw new Exception("Já exite um posto com esse nome!");
-                }
-
                 posto.Nome = updateDto.Nome;
                 _repository.Update(posto);
                 return Result.Ok();

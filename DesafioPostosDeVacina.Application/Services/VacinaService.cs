@@ -20,11 +20,6 @@ namespace DesafioPostosDeVacina.Application.Services
 
         public void CreateVacina(CreateVacinaDTO createDto)
         {
-            var lotesExistentes = _repository.GetAll();
-            if (lotesExistentes.Any(v => v.Lote == createDto.Lote))
-            {
-                throw new Exception("Não pode cadastrar um lote que já existe!");
-            }
             _repository.Create(_mapper.Map<Vacina>(createDto));
         }
 
@@ -39,12 +34,6 @@ namespace DesafioPostosDeVacina.Application.Services
             Vacina vacina = _repository.GetById(id);
             if (vacina != null)
             {
-                var lotesExistentes = _repository.GetAll();
-                if (lotesExistentes.Any(v => v.Lote == updateDto.Lote))
-                {
-                    throw new Exception("Não pode cadastrar um lote que já existe!");
-                }
-
                 vacina.Id = id;
                 vacina.Nome = updateDto.Nome;
                 vacina.Lote = updateDto.Lote;
